@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>今日一練 · Day 2</title>
+<style>
+  :root {
+    --bg: #f5f5f7;
+    --card-bg: #ffffff;
+    --text: #1d1d1f;
+    --text-secondary: #6e6e73;
+    --border: #d2d2d7;
+    --accent: #0071e3;
+    --correct: #1e8e3e;
+    --wrong: #d93025;
+    --code-bg: #f0f0f2;
+    --progress-track: #e2e2e5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e;
+      --card-bg: #2c2c2e;
+      --text: #f5f5f7;
+      --text-secondary: #a1a1a6;
+      --border: #48484a;
+      --accent: #409cff;
+      --correct: #34c759;
+      --wrong: #ff6961;
+      --code-bg: #1a1a1c;
+      --progress-track: #3a3a3c;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 0 16px 60px;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang TC", "Helvetica Neue", sans-serif;
+    line-height: 1.6;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; }
+  header {
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    padding: 16px 0 12px;
+    z-index: 10;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 20px;
+  }
+  header h1 { font-size: 20px; margin: 0 0 4px; }
+  header .date { color: var(--text-secondary); font-size: 13px; margin-bottom: 10px; }
+  .progress-row { display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--text-secondary); }
+  .progress-track {
+    flex: 1;
+    height: 6px;
+    background: var(--progress-track);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 3px;
+  }
+  section {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  section > h2 {
+    font-size: 17px;
+    margin: 0 0 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  section > .section-desc {
+    color: var(--text-secondary);
+    font-size: 13px;
+    margin-bottom: 16px;
+  }
+  .badge {
+    display: inline-block;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: var(--code-bg);
+    color: var(--text-secondary);
+  }
+  .question {
+    border-top: 1px solid var(--border);
+    padding-top: 16px;
+    margin-top: 16px;
+  }
+  .question:first-of-type { border-top: none; padding-top: 0; margin-top: 0; }
+  .q-title { font-weight: 600; margin-bottom: 10px; font-size: 15px; }
+  .options { display: flex; flex-direction: column; gap: 8px; }
+  .option {
+    text-align: left;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--card-bg);
+    color: var(--text);
+    font-size: 14px;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .option:active { opacity: 0.7; }
+  .option.correct { border-color: var(--correct); background: color-mix(in srgb, var(--correct) 12%, var(--card-bg)); }
+  .option.wrong { border-color: var(--wrong); background: color-mix(in srgb, var(--wrong) 12%, var(--card-bg)); }
+  .option.disabled { pointer-events: none; }
+  .explain {
+    display: none;
+    margin-top: 12px;
+    padding: 14px;
+    background: var(--code-bg);
+    border-radius: 10px;
+    font-size: 13.5px;
+  }
+  .explain.show { display: block; }
+  .explain .verdict { font-weight: 700; margin-bottom: 6px; }
+  .explain .verdict.correct-text { color: var(--correct); }
+  .explain .verdict.wrong-text { color: var(--wrong); }
+  .explain .followup {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--border);
+    color: var(--text-secondary);
+  }
+  .explain code, .q-title code, p code {
+    background: var(--code-bg);
+    padding: 1px 5px;
+    border-radius: 4px;
+    font-size: 0.92em;
+  }
+  pre {
+    background: var(--code-bg);
+    padding: 12px;
+    border-radius: 10px;
+    overflow-x: auto;
+    font-size: 13px;
+  }
+  pre code { background: none; padding: 0; }
+  .note-ref { color: var(--accent); font-size: 12.5px; }
+  article.backend-content p { margin: 0 0 12px; font-size: 14.5px; }
+  article.backend-content h3 { font-size: 15px; margin: 18px 0 8px; }
+  article.backend-content ul, article.backend-content ol { padding-left: 20px; font-size: 14.5px; }
+  article.backend-content li { margin-bottom: 6px; }
+  table.compare {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+    margin: 10px 0;
+  }
+  table.compare th, table.compare td {
+    border: 1px solid var(--border);
+    padding: 6px 10px;
+    text-align: left;
+  }
+  table.compare th { background: var(--code-bg); }
+  details {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 14px;
+    margin-top: 10px;
+    background: var(--code-bg);
+  }
+  details summary {
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+  }
+  details[open] summary { margin-bottom: 8px; }
+  details p, details pre { font-size: 13.5px; }
+  .diagram-wrap {
+    background: var(--code-bg);
+    border-radius: 10px;
+    padding: 12px;
+    margin: 12px 0;
+    overflow-x: auto;
+  }
+  .diagram-wrap svg { display: block; margin: 0 auto; max-width: 100%; height: auto; }
+  .diagram-caption { text-align: center; font-size: 12px; color: var(--text-secondary); margin-top: 6px; }
+  footer {
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 12px;
+    margin-top: 30px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>📚 今日一練</h1>
+  <div class="date">Day 2 · 2026-07-13</div>
+  <div class="progress-row">
+    <span>後端進度</span>
+    <div class="progress-track"><div class="progress-fill" style="width: 6.25%;"></div></div>
+    <span>2 / 32 節</span>
+  </div>
+</header>
+
+<!-- ============ Part 1: iOS 面試 recap ============ -->
+<section>
+  <h2>🍎 iOS 面試 recap <span class="badge">主軸：UIKit</span></h2>
+  <div class="section-desc">2 題 UIKit + 1 題隨機（記憶體管理）</div>
+
+  <div class="question">
+    <div class="q-title">Q1. 你的 List 頁面用 self-sizing cell（<code>UITableView.automaticDimension</code>），Cell 內部大概有 25 個 constraints。上線後某些機型滑動時偶爾掉幀，Instruments 顯示大量時間花在 <code>systemLayoutSizeFitting</code>。下列哪個說法最準確地解釋了問題根源？
+      <pre><code>tableView.rowHeight = UITableView.automaticDimension
+tableView.estimatedRowHeight = 44   // Cell 實際平均高度是 180</code></pre>
+    </div>
+    <div class="options">
+      <button class="option" data-correct="false">Self-sizing cell 本身效能就很差，任何情況都應該改用固定高度</button>
+      <button class="option" data-correct="true">兩個因素疊加：(1) Auto Layout 引擎求解 constraint system 的成本與 constraint 數量大致呈平方關係，25 個 constraints 本身就偏重；(2) <code>estimatedRowHeight</code> 與實際高度落差太大（44 vs 180），導致大量 cell 需要在滾動中重新計算精確高度，兩者一起放大了每幀的計算量</button>
+      <button class="option" data-correct="false">問題出在 <code>dequeueReusableCell</code> 沒有搭配 <code>indexPath</code> 版本，導致 cell 沒有被正確重用</button>
+      <button class="option" data-correct="false"><code>estimatedRowHeight</code> 只影響第一次載入的畫面，跟滑動時的效能無關</button>
+    </div>
+    <div class="explain">
+      <div class="verdict"></div>
+      <p>這是面試官很愛問的「為什麼」而不是「怎麼修」：self-sizing 的本質是系統在 <code>cellForRow</code> 之後呼叫 <code>cell.systemLayoutSizeFitting(_:)</code>，讓 Auto Layout 引擎實際求解一次 constraint system 才能得到 intrinsic content size。這個求解成本隨 constraint 數量增加而快速上升，25 個 constraints 屬於偏重的量級。同時 <code>estimatedRowHeight</code> 只是一個「預估值」，如果跟實際高度差太多（這裡差了 4 倍），滾動過程中系統要不斷用估計值排版、拿到真實高度後又重新調整，造成 scroll indicator 跳動與額外的 layout pass——這兩件事是分開但會疊加的成本，不是同一個問題的兩種說法。</p>
+      <p class="note-ref">相關筆記：[[UITableView-UICollectionView 效能優化]]</p>
+      <div class="followup"><strong>面試官可能追問：</strong>「如果不能減少 constraint 數量，還有什麼優化方向？」→ 手動快取已計算過的高度（<code>[IndexPath: CGFloat]</code>）、把 <code>estimatedRowHeight</code> 設成接近實際平均值、或改用 <code>sizeThatFits(_:)</code> 手動計算取代讓 Auto Layout 引擎求解。</div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="q-title">Q2. 設計師要求卡片有陰影效果，你這樣寫，結果在 Instruments 的 Core Animation 工具裡看到大片黃色（Color Offscreen-Rendered）：
+      <pre><code>layer.shadowColor = UIColor.black.cgColor
+layer.shadowOffset = CGSize(width: 0, height: 2)
+layer.shadowRadius = 4
+layer.shadowOpacity = 0.3
+// 沒有設定 shadowPath</code></pre>
+      下列哪個修法最直接對症下藥，且說明了正確的原因？
+    </div>
+    <div class="options">
+      <button class="option" data-correct="false">把 <code>shadowOpacity</code> 調低到 0.1 即可解決，因為 offscreen rendering 只跟透明度有關</button>
+      <button class="option" data-correct="true">設定 <code>layer.shadowPath</code>：因為沒有 shadowPath 時，render server 必須先把整個 layer（含子 layer）畫到 offscreen buffer，才能從中算出精確的 alpha 輪廓來決定陰影形狀；提供明確的 path 後，GPU 可以直接依照這個路徑畫陰影，不需要額外的 offscreen pass</button>
+      <button class="option" data-correct="false">改用 <code>masksToBounds = true</code> 取代 shadow 相關屬性，效能會自動改善</button>
+      <button class="option" data-correct="false">Offscreen rendering 只發生在 Simulator，真機上不會有這個問題，可以忽略</button>
+    </div>
+    <div class="explain">
+      <div class="verdict"></div>
+      <p>Shadow 沒有指定 <code>shadowPath</code> 時，GPU 沒辦法「猜」出 layer 的輪廓要怎麼畫陰影，只能先把整個 layer tree 完整渲染到一個暫時的 offscreen buffer，再從裡面推算出 alpha 輪廓，這一整套流程包含額外的記憶體分配、context switching、以及多一次完整的 rendering pass。加上 <code>shadowPath</code> 之後，GPU 直接照著你給的路徑畫陰影，完全跳過那次額外渲染。要注意如果卡片的 bounds 會隨 Auto Layout 變動（例如 self-sizing cell），<code>shadowPath</code> 必須在 <code>layoutSubviews</code> 裡跟著更新，否則陰影形狀會跟畫面對不上。</p>
+      <p class="note-ref">相關筆記：[[離屏渲染與 Core Animation 效能]]</p>
+      <div class="followup"><strong>面試官可能追問：</strong>「那 <code>cornerRadius</code> 加 <code>masksToBounds</code> 呢，一定會觸發 offscreen rendering 嗎？」→ 不一定。iOS 13+ 對「只裁切 backgroundColor/borderWidth，沒有子 view 需要裁切」的情況做了優化不再觸發；只有當 layer 有子 view 或 contents 需要被裁切、且設了 <code>masksToBounds</code> 時才會觸發。</div>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="q-title">Q3.（隨機主題：記憶體管理）以下 ViewModel 只在 <code>viewDidLoad</code> 訂閱了 <strong>App 層級 singleton</strong> 的 <code>UserSession.shared.stateRelay</code>（不是自己的 property），畫面 pop 離開後 <code>deinit</code> 沒有被呼叫。<code>disposeBag</code> 有正確在 <code>deinit</code> 前被釋放。下列哪個說法正確描述了這個現象的機制？
+      <pre><code>class ProfileViewModel {
+    let disposeBag = DisposeBag()
+
+    func bind() {
+        UserSession.shared.stateRelay
+            .subscribe(onNext: { [weak self] state in
+                self?.apply(state)
+            })
+            .disposed(by: disposeBag)
+    }
+    deinit { print("🗑️ deinit") }
+}</code></pre>
+    </div>
+    <div class="options">
+      <button class="option" data-correct="false">這是典型的 retain cycle：<code>ViewModel → disposeBag → Disposable → closure → ViewModel</code> 形成封閉循環，跟訂閱自己的 Relay 是同一種機制</button>
+      <button class="option" data-correct="false">因為用了 <code>[weak self]</code>，理論上 deinit 一定會被正確呼叫，題目描述的現象不可能發生</button>
+      <button class="option" data-correct="true">既然已經用了 <code>[weak self]</code> 且 <code>disposeBag</code> 有正常釋放，closure 不會強捕獲 self，這條路徑不會阻止 deinit；如果 deinit 真的沒被呼叫，問題應該往別處找（例如 ViewController 本身被其他強引用鏈卡住，或 <code>apply(state)</code> 內部又產生了新的強引用），而不是這段訂閱程式碼本身</button>
+      <button class="option" data-correct="false"><code>UserSession.shared</code> 是 singleton，訂閱 singleton 的 Relay 本質上就是 retain cycle，這是 Swift 語言層級的限制，跟有沒有 <code>[weak self]</code> 無關</button>
+    </div>
+    <div class="explain">
+      <div class="verdict"></div>
+      <p>這題刻意反著問，用來檢查「是否真的理解機制，還是背了『訂閱 singleton 會漏』這種片面結論」。正確的判讀框架是分清楚三種不同的「物件死不掉」：<strong>真環（retain cycle）</strong>是封閉的互相持有（例如訂閱自己的 Relay 又強捕獲 self）；<strong>假環（全域根強鏈）</strong>是被活得比你久的全域物件單向持有（例如訂閱 singleton 的 subject、repeating Timer 的 target、NotificationCenter observer），這種情況下即使沒有互相持有，只要 closure 強捕獲了 self，一樣會讓 self 活到跟 singleton 一樣久；而題目給的程式碼因為已經正確用了 <code>[weak self]</code>，closure 根本沒有強捕獲 self，不管訂閱的是自己的 Relay 還是 singleton 的 Relay，這條路徑都不構成阻止 deinit 的原因。把「訂閱 singleton 一定漏」當成規則來背，會讓你在這種已經正確處理過的程式碼裡誤判出根本不存在的 bug。</p>
+      <p class="note-ref">相關筆記：[[引用鏈判讀：真環、假環與 struct 穿透]]、[[Retain Cycle 完整圖鑑]]</p>
+      <div class="followup"><strong>面試官可能追問：</strong>「如果拿掉 <code>[weak self]</code>，訂閱 singleton 的 Relay 會發生什麼事？」→ 會變成假環：<code>UserSession.shared → stateRelay → observers Bag → closure → self</code>，因為 <code>UserSession.shared</code> 是 App 級全域根，這條單向強鏈會讓 ViewModel 活到跟整個 App 一樣久，即使它不是封閉循環，也不會被 ARC 自動偵測或回收。</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ Part 2: 後端必備知識 ============ -->
+<section>
+  <h2>🌐 後端必備知識 <span class="badge">1-3 TLS 與 HTTPS</span></h2>
+  <div class="section-desc">Stage 1：HTTP 與 Web 基礎</div>
+
+  <article class="backend-content">
+    <p>昨天談完 HTTP 怎麼「送資料更快」，今天談送資料「怎麼安全」。HTTPS 就是 HTTP + TLS——TLS 在 TCP 之上加了三個保證：<strong>機密性</strong>（第三方看不到內容）、<strong>完整性</strong>（內容沒被竄改）、<strong>身份驗證</strong>（你連的真的是那台 server，不是冒充的）。這對 App 工程師來說不只是「後端的事」：你在 <code>URLSession</code> 裡處理的 <code>URLAuthenticationChallenge</code>、Certificate Pinning 的實作，都是直接站在這套機制上面。</p>
+
+    <h3>先看一個具體場景：App 打開時第一次連線</h3>
+    <p>假設你的 App 冷啟動後第一次呼叫 <code>GET /api/profile</code>。在 TCP 三次握手完成之後，TLS 握手才開始——這是額外疊加的一層，每多一輪來回（RTT）都是實打實的延遲，在行動網路上尤其有感。TLS 1.2 需要 <strong>2-RTT</strong> 才能開始傳真正的資料：</p>
+
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 620 260" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, sans-serif">
+        <text x="90" y="20" font-size="12" fill="currentColor" text-anchor="middle" font-weight="600">Client (App)</text>
+        <text x="530" y="20" font-size="12" fill="currentColor" text-anchor="middle" font-weight="600">Server</text>
+        <line x1="90" y1="30" x2="90" y2="245" stroke="currentColor" stroke-opacity="0.3" stroke-width="1.5"/>
+        <line x1="530" y1="30" x2="530" y2="245" stroke="currentColor" stroke-opacity="0.3" stroke-width="1.5"/>
+
+        <line x1="90" y1="50" x2="530" y2="70" stroke="#409cff" stroke-width="2" marker-end="url(#arrow)"/>
+        <text x="95" y="46" font-size="11" fill="currentColor">ClientHello（支援的 cipher suites、Client Random）</text>
+
+        <line x1="530" y1="90" x2="90" y2="110" stroke="#409cff" stroke-width="2" marker-end="url(#arrow2)"/>
+        <text x="300" y="86" font-size="11" fill="currentColor" text-anchor="middle">ServerHello + Certificate + ServerKeyExchange</text>
+
+        <rect x="250" y="118" width="140" height="16" rx="8" fill="#34c759" fill-opacity="0.18"/>
+        <text x="320" y="130" font-size="10" fill="currentColor" text-anchor="middle">RTT 1 結束（明文）</text>
+
+        <line x1="90" y1="148" x2="530" y2="168" stroke="#409cff" stroke-width="2" marker-end="url(#arrow)"/>
+        <text x="95" y="144" font-size="11" fill="currentColor">ClientKeyExchange + Finished（加密）</text>
+
+        <line x1="530" y1="188" x2="90" y2="208" stroke="#409cff" stroke-width="2" marker-end="url(#arrow2)"/>
+        <text x="300" y="184" font-size="11" fill="currentColor" text-anchor="middle">Finished（加密）</text>
+
+        <rect x="230" y="216" width="180" height="16" rx="8" fill="#34c759" fill-opacity="0.18"/>
+        <text x="320" y="228" font-size="10" fill="currentColor" text-anchor="middle">RTT 2 結束 → 開始傳 App Data</text>
+
+        <defs>
+          <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#409cff"/></marker>
+          <marker id="arrow2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M6,0 L0,3 L6,6 Z" fill="#409cff"/></marker>
+        </defs>
+      </svg>
+      <div class="diagram-caption">TLS 1.2：2-RTT 才能開始傳輸應用層資料</div>
+    </div>
+
+    <p>關鍵瓶頸在於 TLS 1.2 的握手是「一來一往、逐步確認」：Client 先問 server 支援什麼，server 回覆選定的版本與 certificate，Client 驗證完才能送出 key exchange 資料，server 再確認一次——完整跑完要兩輪。TLS 1.3 把這個流程重新設計，讓 Client 在 <strong>第一則訊息</strong>就直接帶上自己的 DH public key（<code>key_share</code>），不用等 server 先選好演算法再送，因此壓縮成 <strong>1-RTT</strong>，甚至對「回頭客」（曾經連過的 session）可以做到 <strong>0-RTT</strong>：</p>
+
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 620 200" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, sans-serif">
+        <text x="90" y="20" font-size="12" fill="currentColor" text-anchor="middle" font-weight="600">Client (App)</text>
+        <text x="530" y="20" font-size="12" fill="currentColor" text-anchor="middle" font-weight="600">Server</text>
+        <line x1="90" y1="30" x2="90" y2="185" stroke="currentColor" stroke-opacity="0.3" stroke-width="1.5"/>
+        <line x1="530" y1="30" x2="530" y2="185" stroke="currentColor" stroke-opacity="0.3" stroke-width="1.5"/>
+
+        <line x1="90" y1="55" x2="530" y2="75" stroke="#34c759" stroke-width="2" marker-end="url(#arrow3)"/>
+        <text x="95" y="51" font-size="11" fill="currentColor">ClientHello + key_share（直接送 DH public key）</text>
+
+        <line x1="530" y1="95" x2="90" y2="115" stroke="#34c759" stroke-width="2" marker-end="url(#arrow4)"/>
+        <text x="300" y="91" font-size="11" fill="currentColor" text-anchor="middle">ServerHello + key_share + 加密的 Certificate + Finished</text>
+
+        <rect x="250" y="123" width="140" height="16" rx="8" fill="#34c759" fill-opacity="0.18"/>
+        <text x="320" y="135" font-size="10" fill="currentColor" text-anchor="middle">RTT 1 結束</text>
+
+        <line x1="90" y1="155" x2="530" y2="155" stroke="#34c759" stroke-width="2" marker-end="url(#arrow3)"/>
+        <text x="300" y="150" font-size="11" fill="currentColor" text-anchor="middle">Finished → 直接開始 App Data（加密）</text>
+
+        <defs>
+          <marker id="arrow3" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#34c759"/></marker>
+          <marker id="arrow4" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M6,0 L0,3 L6,6 Z" fill="#34c759"/></marker>
+        </defs>
+      </svg>
+      <div class="diagram-caption">TLS 1.3：1-RTT，且從 EncryptedExtensions 開始整段都是加密的</div>
+    </div>
+
+    <p>除了少一輪 RTT，TLS 1.3 還把 <code>Certificate</code> 這類敏感資訊改成加密傳輸（TLS 1.2 是明文送出 certificate chain，任何中間節點都看得到你連的是哪個網域），並且移除了一批已知不安全的演算法（RSA key exchange、CBC 模式、SHA-1），強制要求 <strong>Forward Secrecy</strong>——每次連線用臨時產生的 ephemeral key，即使 server 的長期 private key 未來洩漏，過去被側錄的流量也無法被回頭解密。</p>
+
+    <h3>Certificate Chain：為什麼 App 要信任一份「陌生」的憑證</h3>
+    <p>Server 送來的 certificate 不是憑空可信的，而是靠一條 <strong>信任鏈</strong> 逐層驗證回到系統內建的 Root CA：</p>
+    <pre><code>Root CA（預裝在 iOS 系統，Apple 管理）
+   └─ Intermediate CA（Root CA 簽發）
+        └─ Server Certificate（api.yourapp.com，Intermediate CA 簽發）</code></pre>
+    <p>驗證時要逐層確認 signature、有效期、網域是否匹配，直到鏈頂的 Root CA 出現在系統信任清單裡才算過。這也是為什麼「開發環境用自簽 certificate 導致連線失敗」——自簽憑證沒有任何 CA 簽發，鏈直接斷在半路，系統當然不信任。</p>
+
+    <h3>那 Certificate Pinning 又是為了防什麼？</h3>
+    <p>標準 TLS 驗證回答的問題是「這張憑證是被信任的 CA 簽的嗎？」，但如果使用者手機被裝了惡意 root CA（常見於某些 MDM 或惡意軟體），或是某個 CA 本身被入侵、簽發了假憑證，攻擊者一樣能提供一張「合法但假」的憑證通過標準驗證，做中間人攻擊（MITM）。Certificate Pinning 回答的是另一個更嚴格的問題：「這張憑證是不是我事先預期的那一張／那把公鑰？」——即使是合法 CA 簽的其他憑證也一律拒絕。這是防禦層級的差異，不是同一件事的兩種說法。</p>
+
+    <h3>iOS 端的落地：ATS 與 URLSessionTaskMetrics</h3>
+    <p>iOS 9 起預設啟用 <strong>ATS（App Transport Security）</strong>，強制要求 HTTPS、TLS 1.2 以上、Forward Secrecy、以及最低金鑰長度，等於把上面這些安全底線直接內建在系統層級，你不需要每個 App 都自己檢查一遍。如果想確認實際連線用的是哪個 TLS 版本，可以在 <code>didFinishCollecting metrics:</code> 裡讀 <code>transaction.negotiatedTLSProtocolVersion</code>；想觀察握手花了多久，可以比較 <code>secureConnectionStartDate</code> 和 <code>secureConnectionEndDate</code> 的差值——這在 debug「App 冷啟動第一個 API 特別慢」時很有用，往往就是 TLS 握手加上 DNS 查詢疊加起來的延遲。</p>
+  </article>
+
+  <details>
+    <summary>📝 小測驗（3 題，點擊展開作答）</summary>
+    <div class="question" style="border-top:none; padding-top:8px; margin-top:8px;">
+      <div class="q-title">B1. TLS 1.3 相較 TLS 1.2，握手 RTT 數量減少的關鍵原因是什麼？</div>
+      <div class="options">
+        <button class="option" data-correct="false">TLS 1.3 完全取消了 Certificate 驗證流程，所以少一輪來回</button>
+        <button class="option" data-correct="true">Client 在第一則 ClientHello 訊息就直接帶上 <code>key_share</code>（自己的 DH public key），不需要等 Server 先確認選用哪種 cipher suite 之後才送出 key exchange 資料，讓雙方能在 1-RTT 內就完成金鑰協商</button>
+        <button class="option" data-correct="false">TLS 1.3 改用 UDP 傳輸，天生比 TCP 少一輪握手</button>
+        <button class="option" data-correct="false">TLS 1.3 不再需要驗證 certificate chain 的有效期</button>
+      </div>
+      <div class="explain">
+        <div class="verdict"></div>
+        <p>TLS 1.2 之所以要 2-RTT，是因為 Client 要先知道 Server 選定的 cipher suite 之後，才能送出對應的 key exchange 參數。TLS 1.3 讓 Client 主動先猜測（實務上幾乎都猜對，因為支援的曲線很集中）並直接把 <code>key_share</code> 塞進第一則訊息，Server 收到後可以立刻回覆自己的 <code>key_share</code> 加上已經加密的 Certificate，完成 1-RTT。Certificate 驗證流程仍然存在，只是被加密保護且塞進同一輪 RTT 內。UDP 傳輸是 HTTP/3 的 QUIC 層面的事，跟 TLS 1.3 是否用 TCP 無關（TLS 1.3 一樣可以跑在 TCP 之上）。</p>
+      </div>
+    </div>
+    <div class="question">
+      <div class="q-title">B2. 什麼是 Forward Secrecy？它保護的是哪種情境？</div>
+      <div class="options">
+        <button class="option" data-correct="false">保證封包在傳輸過程中不會遺失</button>
+        <button class="option" data-correct="true">每次連線使用臨時產生的 ephemeral key 進行金鑰交換（如 ECDHE），使得即使 server 的長期 private key 未來洩漏，過去已經加密傳輸並被側錄下來的歷史流量，攻擊者依然無法回頭解密</button>
+        <button class="option" data-correct="false">保證 certificate 永遠不會過期</button>
+        <button class="option" data-correct="false">防止使用者的裝置被安裝惡意的 root CA</button>
+      </div>
+      <div class="explain">
+        <div class="verdict"></div>
+        <p>如果 key exchange 用的是固定的 RSA 長期金鑰，一旦這把 private key 未來洩漏，攻擊者可以拿它回頭解密所有曾經側錄下來的加密流量（因為每次連線用的都是同一把金鑰衍生的 pre-master secret）。Forward Secrecy 靠每次連線都產生一組全新、用完即丟的 ephemeral key pair（ECDHE 的「E」），讓每次連線的金鑰互相獨立，過去的流量不會因為未來金鑰外洩而被回溯破解。這跟封包遺失重傳、certificate 效期、惡意 root CA 都是不同層面的問題。</p>
+      </div>
+    </div>
+    <div class="question">
+      <div class="q-title">B3. Certificate Pinning 和標準的 TLS Certificate 驗證，兩者的差異是什麼？</div>
+      <div class="options">
+        <button class="option" data-correct="false">兩者其實是同一件事的不同名稱，沒有實質差異</button>
+        <button class="option" data-correct="true">標準 TLS 驗證只確認「這張憑證是不是被系統信任的 CA 簽發的」；Certificate Pinning 更進一步要求「這張憑證（或其公鑰）是不是 App 事先寫死、預期的那一張」，即使是合法 CA 簽發的其他憑證也拒絕，用來防禦 CA 被入侵或裝置被安裝惡意 root CA 造成的中間人攻擊</button>
+        <button class="option" data-correct="false">Certificate Pinning 是用來加速 TLS 握手的效能優化技巧，跟安全驗證無關</button>
+        <button class="option" data-correct="false">標準 TLS 驗證只在 debug 模式生效，Certificate Pinning 才是 production 唯一的驗證機制</button>
+      </div>
+      <div class="explain">
+        <div class="verdict"></div>
+        <p>標準 TLS 驗證的信任基礎是「這張證書的簽發鏈可以回溯到系統信任的 Root CA」，但這個信任模型有個前提：所有 CA 都值得信任、都不會被騙或被駭。Certificate Pinning 不依賴這個前提，直接把「我只信任這一張特定憑證（或其 public key）」寫死在 App 裡，即使攻擊者用合法 CA 簽出的假憑證，也因為跟 App 內建的不一致而被拒絕。代價是 certificate 更新或 key rotation 時，如果沒有妥善規劃，可能導致 App 直接無法連線，需要搭配版本更新或多組備援 pin。</p>
+      </div>
+    </div>
+  </details>
+</section>
+
+<!-- ============ Part 3: 演算法 ============ -->
+<section>
+  <h2>🧩 演算法 <span class="badge">Sliding Window · Easy</span></h2>
+  <div class="section-desc">題型輪替 #3，第一次出，難度 Easy</div>
+
+  <div class="question">
+    <div class="q-title">
+      <strong>Longest Substring Without Repeating Characters（最長不重複子字串）</strong><br>
+      給定一個字串 <code>s</code>，找出其中不含重複字元的最長子字串長度。
+      <pre><code>輸入: s = "abcabcbb"
+輸出: 3
+解釋: 最長不重複子字串是 "abc"，長度為 3
+
+輸入: s = "bbbbb"
+輸出: 1
+解釋: 最長不重複子字串是 "b"，長度為 1
+
+輸入: s = "pwwkew"
+輸出: 3
+解釋: 最長不重複子字串是 "wke"，長度為 3</code></pre>
+    </div>
+
+    <details>
+      <summary>💡 提示 1：思考方向</summary>
+      <p>最直覺的解法是對每個起點都往右掃到出現重複字元為止，記錄最長長度——但這樣每個起點都要重新掃一次，時間複雜度是 O(n²)。想想看：當你從某個起點往右掃，發現第一次出現重複字元時，下一次真的需要把起點退回「原本起點 +1」，重新從頭掃一次嗎？還是說，你其實已經知道「不含重複字元」的區間上一次延伸到哪裡了，可以直接利用這個資訊？</p>
+    </details>
+
+    <details>
+      <summary>🔍 提示 2：關鍵觀察</summary>
+      <p>用一個「視窗」（sliding window）維護目前正在檢查、不含重複字元的區間 <code>[left, right]</code>，搭配一個 <code>Set</code>（或 <code>[Character: Int]</code> 記錄字元最後出現的位置）：</p>
+      <ul>
+        <li><code>right</code> 一路往右擴張視窗，每次把新字元加進去</li>
+        <li>如果新字元在目前視窗內已經出現過，代表視窗不能再涵蓋這個重複的位置——不用把 <code>left</code> 退回起點重新掃，而是直接把 <code>left</code> 跳到「重複字元上次出現位置的下一格」，視窗只往前收縮到剛好排除重複，不多不少</li>
+        <li>每次視窗合法（無重複）時，用 <code>right - left + 1</code> 更新最長長度</li>
+      </ul>
+      <p>因為 <code>left</code> 和 <code>right</code> 都只會單調往右移動、各自最多走 n 步，整個過程只需要一次線性掃描，時間複雜度從 O(n²) 降到 O(n)。這是 sliding window 題型最典型的套路：用「維護一個滿足條件的區間，隨資料流動態伸縮邊界」取代「每個起點都重新算一次」。</p>
+    </details>
+
+    <details>
+      <summary>✅ 提示 3：參考解法（Swift）</summary>
+      <pre><code>func lengthOfLongestSubstring(_ s: String) -> Int {
+    let chars = Array(s)
+    var lastSeenIndex: [Character: Int] = [:]
+    var left = 0
+    var maxLength = 0
+
+    for right in 0..&lt;chars.count {
+        let c = chars[right]
+        if let seenAt = lastSeenIndex[c], seenAt >= left {
+            // 重複字元在目前視窗內，收縮 left 到它的下一格
+            left = seenAt + 1
+        }
+        lastSeenIndex[c] = right
+        maxLength = max(maxLength, right - left + 1)
+    }
+    return maxLength
+}</code></pre>
+      <p>複雜度：時間 O(n)（<code>left</code>、<code>right</code> 各自單調遞增，總移動次數不超過 2n），空間 O(min(n, Σ))，Σ 是字元集大小（例如只有小寫英文字母時最多 26）。這裡有個容易忽略的細節：判斷重複時要檢查 <code>seenAt >= left</code>，而不是只檢查「這個字元有沒有出現過」——因為字元可能出現在目前視窗<strong>之前</strong>（已經被排除在視窗外），那種情況不算重複，不需要收縮 <code>left</code>。如果面試官追問「為什麼不能直接把 <code>left</code> 往前掃到找到重複為止」，可以強調這正是視窗維護「上次已知邊界」的價值——避免每次都要重新掃描。</p>
+    </details>
+  </div>
+</section>
+
+<footer>Daily Learning · 自動產生於 2026-07-13</footer>
+
+</div>
+
+<script>
+document.querySelectorAll('.question').forEach(function(q) {
+  var options = q.querySelectorAll('.option');
+  var explain = q.querySelector('.explain');
+  if (!options.length || !explain) return;
+
+  options.forEach(function(opt) {
+    opt.addEventListener('click', function() {
+      var isCorrect = opt.getAttribute('data-correct') === 'true';
+      options.forEach(function(o) { o.classList.add('disabled'); });
+
+      if (isCorrect) {
+        opt.classList.add('correct');
+      } else {
+        opt.classList.add('wrong');
+        var correctOpt = Array.prototype.find.call(options, function(o) {
+          return o.getAttribute('data-correct') === 'true';
+        });
+        if (correctOpt) correctOpt.classList.add('correct');
+      }
+
+      var verdict = explain.querySelector('.verdict');
+      if (verdict) {
+        if (isCorrect) {
+          verdict.textContent = '✅ 答對了';
+          verdict.className = 'verdict correct-text';
+        } else {
+          verdict.textContent = '❌ 答錯了，看看為什麼';
+          verdict.className = 'verdict wrong-text';
+        }
+      }
+      explain.classList.add('show');
+    });
+  });
+});
+</script>
+
+</body>
+</html>
