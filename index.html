@@ -3,32 +3,38 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>今日一練 · Day 2</title>
+<title>今日一練 Day 5</title>
 <style>
   :root {
-    --bg: #f5f5f7;
+    --bg: #f5f6f8;
     --card-bg: #ffffff;
-    --text: #1d1d1f;
-    --text-secondary: #6e6e73;
-    --border: #d2d2d7;
-    --accent: #0071e3;
-    --correct: #1e8e3e;
-    --wrong: #d93025;
-    --code-bg: #f0f0f2;
-    --progress-track: #e2e2e5;
+    --text: #1c1e21;
+    --text-dim: #5a5f66;
+    --border: #e2e4e8;
+    --accent: #3762e0;
+    --accent-soft: #eaeeff;
+    --good: #1a8f4c;
+    --good-bg: #e6f6ec;
+    --bad: #c8372f;
+    --bad-bg: #fdecea;
+    --code-bg: #f0f1f4;
+    --track-bg: #e2e4e8;
   }
   @media (prefers-color-scheme: dark) {
     :root {
-      --bg: #1c1c1e;
-      --card-bg: #2c2c2e;
-      --text: #f5f5f7;
-      --text-secondary: #a1a1a6;
-      --border: #48484a;
-      --accent: #409cff;
-      --correct: #34c759;
-      --wrong: #ff6961;
-      --code-bg: #1a1a1c;
-      --progress-track: #3a3a3c;
+      --bg: #14161a;
+      --card-bg: #1d2025;
+      --text: #e8e9ec;
+      --text-dim: #9a9fa8;
+      --border: #2c3038;
+      --accent: #7d9bff;
+      --accent-soft: #232a45;
+      --good: #4fd08a;
+      --good-bg: #123023;
+      --bad: #ff7a72;
+      --bad-bg: #3a1c1c;
+      --code-bg: #24272e;
+      --track-bg: #2c3038;
     }
   }
   * { box-sizing: border-box; }
@@ -37,489 +43,418 @@
     padding: 0 16px 60px;
     background: var(--bg);
     color: var(--text);
-    font-family: -apple-system, BlinkMacSystemFont, "PingFang TC", "Helvetica Neue", sans-serif;
-    line-height: 1.6;
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang TC", "Segoe UI", sans-serif;
+    line-height: 1.65;
   }
-  .wrap { max-width: 760px; margin: 0 auto; }
+  .container { max-width: 760px; margin: 0 auto; }
   header {
+    padding: 24px 0 16px;
     position: sticky;
     top: 0;
     background: var(--bg);
-    padding: 16px 0 12px;
     z-index: 10;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 20px;
   }
-  header h1 { font-size: 20px; margin: 0 0 4px; }
-  header .date { color: var(--text-secondary); font-size: 13px; margin-bottom: 10px; }
-  .progress-row { display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--text-secondary); }
+  header h1 { font-size: 22px; margin: 0 0 4px; }
+  header .date { color: var(--text-dim); font-size: 14px; margin-bottom: 14px; }
+  .progress-wrap { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--text-dim); }
   .progress-track {
     flex: 1;
-    height: 6px;
-    background: var(--progress-track);
-    border-radius: 3px;
+    height: 8px;
+    background: var(--track-bg);
+    border-radius: 4px;
     overflow: hidden;
   }
   .progress-fill {
     height: 100%;
     background: var(--accent);
-    border-radius: 3px;
+    border-radius: 4px;
   }
   section {
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 20px;
-    margin-bottom: 20px;
+    margin-top: 28px;
   }
-  section > h2 {
-    font-size: 17px;
-    margin: 0 0 4px;
+  .section-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 4px;
     display: flex;
     align-items: center;
     gap: 8px;
   }
-  section > .section-desc {
-    color: var(--text-secondary);
-    font-size: 13px;
+  .section-sub { color: var(--text-dim); font-size: 13px; margin-bottom: 16px; }
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px 20px;
     margin-bottom: 16px;
   }
-  .badge {
+  .q-tag {
     display: inline-block;
     font-size: 11px;
+    font-weight: 700;
     padding: 2px 8px;
-    border-radius: 999px;
-    background: var(--code-bg);
-    color: var(--text-secondary);
+    border-radius: 20px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    margin-bottom: 10px;
   }
-  .question {
-    border-top: 1px solid var(--border);
-    padding-top: 16px;
-    margin-top: 16px;
-  }
-  .question:first-of-type { border-top: none; padding-top: 0; margin-top: 0; }
-  .q-title { font-weight: 600; margin-bottom: 10px; font-size: 15px; }
+  .q-text { font-size: 15.5px; font-weight: 600; margin-bottom: 14px; }
   .options { display: flex; flex-direction: column; gap: 8px; }
   .option {
     text-align: left;
     padding: 10px 14px;
-    border-radius: 10px;
     border: 1px solid var(--border);
-    background: var(--card-bg);
+    border-radius: 8px;
+    background: transparent;
     color: var(--text);
-    font-size: 14px;
+    font-size: 14.5px;
     cursor: pointer;
     font-family: inherit;
   }
-  .option:active { opacity: 0.7; }
-  .option.correct { border-color: var(--correct); background: color-mix(in srgb, var(--correct) 12%, var(--card-bg)); }
-  .option.wrong { border-color: var(--wrong); background: color-mix(in srgb, var(--wrong) 12%, var(--card-bg)); }
-  .option.disabled { pointer-events: none; }
+  .option:active { transform: scale(0.99); }
+  .option.correct { border-color: var(--good); background: var(--good-bg); color: var(--good); font-weight: 600; }
+  .option.wrong { border-color: var(--bad); background: var(--bad-bg); color: var(--bad); font-weight: 600; }
+  .option[disabled] { cursor: default; }
   .explain {
     display: none;
-    margin-top: 12px;
-    padding: 14px;
+    margin-top: 14px;
+    padding: 14px 16px;
     background: var(--code-bg);
-    border-radius: 10px;
-    font-size: 13.5px;
+    border-radius: 8px;
+    font-size: 14px;
   }
   .explain.show { display: block; }
-  .explain .verdict { font-weight: 700; margin-bottom: 6px; }
-  .explain .verdict.correct-text { color: var(--correct); }
-  .explain .verdict.wrong-text { color: var(--wrong); }
-  .explain .followup {
-    margin-top: 10px;
-    padding-top: 10px;
-    border-top: 1px dashed var(--border);
-    color: var(--text-secondary);
-  }
-  .explain code, .q-title code, p code {
-    background: var(--code-bg);
-    padding: 1px 5px;
-    border-radius: 4px;
-    font-size: 0.92em;
-  }
+  .explain .label { font-weight: 700; margin-bottom: 6px; color: var(--accent); font-size: 12.5px; }
+  .explain p { margin: 0 0 10px; }
+  .explain p:last-child { margin-bottom: 0; }
+  .followup { font-style: italic; color: var(--text-dim); border-top: 1px dashed var(--border); padding-top: 10px; margin-top: 10px; }
+  a { color: var(--accent); }
+  code { background: var(--code-bg); padding: 1px 5px; border-radius: 4px; font-size: 13px; }
   pre {
     background: var(--code-bg);
-    padding: 12px;
-    border-radius: 10px;
+    padding: 12px 14px;
+    border-radius: 8px;
     overflow-x: auto;
     font-size: 13px;
+    line-height: 1.5;
   }
   pre code { background: none; padding: 0; }
-  .note-ref { color: var(--accent); font-size: 12.5px; }
-  article.backend-content p { margin: 0 0 12px; font-size: 14.5px; }
-  article.backend-content h3 { font-size: 15px; margin: 18px 0 8px; }
-  article.backend-content ul, article.backend-content ol { padding-left: 20px; font-size: 14.5px; }
-  article.backend-content li { margin-bottom: 6px; }
-  table.compare {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 13.5px;
-    margin: 10px 0;
-  }
-  table.compare th, table.compare td {
-    border: 1px solid var(--border);
-    padding: 6px 10px;
-    text-align: left;
-  }
-  table.compare th { background: var(--code-bg); }
+  svg { width: 100%; height: auto; display: block; margin: 14px 0; }
+  svg text { fill: var(--text); font-size: 11px; font-family: -apple-system, sans-serif; }
+  .svg-title { font-size: 12px; fill: var(--text-dim); }
+  .quiz-mini { margin-top: 18px; }
+  .quiz-mini h4 { font-size: 14px; margin: 0 0 10px; color: var(--text-dim); }
   details {
     border: 1px solid var(--border);
     border-radius: 10px;
     padding: 10px 14px;
     margin-top: 10px;
-    background: var(--code-bg);
+    background: var(--card-bg);
   }
-  details summary {
+  details + details { margin-top: 8px; }
+  summary {
     cursor: pointer;
     font-weight: 600;
     font-size: 14px;
+    color: var(--accent);
   }
   details[open] summary { margin-bottom: 8px; }
-  details p, details pre { font-size: 13.5px; }
-  .diagram-wrap {
-    background: var(--code-bg);
-    border-radius: 10px;
-    padding: 12px;
-    margin: 12px 0;
-    overflow-x: auto;
-  }
-  .diagram-wrap svg { display: block; margin: 0 auto; max-width: 100%; height: auto; }
-  .diagram-caption { text-align: center; font-size: 12px; color: var(--text-secondary); margin-top: 6px; }
-  footer {
-    text-align: center;
-    color: var(--text-secondary);
-    font-size: 12px;
-    margin-top: 30px;
-  }
+  .algo-desc { margin-bottom: 10px; }
+  .badge-easy { color: var(--good); font-weight: 700; }
+  footer { text-align: center; color: var(--text-dim); font-size: 12px; margin-top: 40px; }
 </style>
 </head>
 <body>
-<div class="wrap">
-
-<header>
-  <h1>📚 今日一練</h1>
-  <div class="date">Day 2 · 2026-07-13</div>
-  <div class="progress-row">
-    <span>後端進度</span>
-    <div class="progress-track"><div class="progress-fill" style="width: 6.25%;"></div></div>
-    <span>2 / 32 節</span>
-  </div>
-</header>
-
-<!-- ============ Part 1: iOS 面試 recap ============ -->
-<section>
-  <h2>🍎 iOS 面試 recap <span class="badge">主軸：UIKit</span></h2>
-  <div class="section-desc">2 題 UIKit + 1 題隨機（記憶體管理）</div>
-
-  <div class="question">
-    <div class="q-title">Q1. 你的 List 頁面用 self-sizing cell（<code>UITableView.automaticDimension</code>），Cell 內部大概有 25 個 constraints。上線後某些機型滑動時偶爾掉幀，Instruments 顯示大量時間花在 <code>systemLayoutSizeFitting</code>。下列哪個說法最準確地解釋了問題根源？
-      <pre><code>tableView.rowHeight = UITableView.automaticDimension
-tableView.estimatedRowHeight = 44   // Cell 實際平均高度是 180</code></pre>
+<div class="container">
+  <header>
+    <h1>今日一練 — Day 5</h1>
+    <div class="date">2026-07-16</div>
+    <div class="progress-wrap">
+      <span>後端進度</span>
+      <div class="progress-track"><div class="progress-fill" style="width: 15.6%"></div></div>
+      <span>5 / 32</span>
     </div>
-    <div class="options">
-      <button class="option" data-correct="false">Self-sizing cell 本身效能就很差，任何情況都應該改用固定高度</button>
-      <button class="option" data-correct="true">兩個因素疊加：(1) Auto Layout 引擎求解 constraint system 的成本與 constraint 數量大致呈平方關係，25 個 constraints 本身就偏重；(2) <code>estimatedRowHeight</code> 與實際高度落差太大（44 vs 180），導致大量 cell 需要在滾動中重新計算精確高度，兩者一起放大了每幀的計算量</button>
-      <button class="option" data-correct="false">問題出在 <code>dequeueReusableCell</code> 沒有搭配 <code>indexPath</code> 版本，導致 cell 沒有被正確重用</button>
-      <button class="option" data-correct="false"><code>estimatedRowHeight</code> 只影響第一次載入的畫面，跟滑動時的效能無關</button>
+  </header>
+
+  <!-- ============ Part 1: iOS 面試 recap ============ -->
+  <section>
+    <div class="section-title">🧠 iOS 面試 Recap</div>
+    <div class="section-sub">主軸主題：架構設計（day mod 8 = 5）</div>
+
+    <!-- Q1 -->
+    <div class="card" id="q1">
+      <span class="q-tag">架構設計 · 觀念理解</span>
+      <div class="q-text">Q1. 團隊的 ViewModel 用 <code>protocol ViewControllerDelegate</code>，讓 ViewController 遵從並設為 <code>viewModel.delegate</code>，ViewModel 內部資料變化時呼叫 <code>delegate?.didUpdateUser(_:)</code> 通知畫面更新。有人說「這其實不是 MVVM」，這個說法的依據是什麼？</div>
+      <div class="options">
+        <button class="option" data-correct="false">A. 沒有依據，delegate 只是實作細節，用 delegate 綁定的仍然是標準 MVVM</button>
+        <button class="option" data-correct="true">B. ViewModel 為了呼叫 delegate 方法，必須知道 View 一方「有哪些方法可呼叫」，等於持有了對 View 的具體認知與實例，這正是 MVP 的特徵；MVVM 的 ViewModel 應該對 View 一無所知</button>
+        <button class="option" data-correct="false">C. 因為 delegate 通常宣告成 weak var，weak reference 不符合 MVVM 的記憶體管理原則</button>
+        <button class="option" data-correct="false">D. 因為 protocol 是 Swift 特有的語法，MVVM 這個模式的原始定義（源自 WPF）不支援 protocol-based 設計</button>
+      </div>
+      <div class="explain">
+        <div class="label">解析</div>
+        <p><b>正解 B。</b>MVVM 的核心契約是「View 認識 ViewModel，但 ViewModel 對 View 一無所知」——資料流是單向的觀察關係，ViewModel 只管把狀態放出去，不在乎誰在看、看的人要做什麼。用 delegate 綁定時，ViewModel 必須先定義一份 protocol（例如 <code>didUpdateUser(_:)</code>），這份 protocol 描述的正是「View 該有什麼行為」；ViewModel 指定了誰是它的 delegate，等於它明確知道自己在跟一個特定角色的物件溝通、並主動呼叫對方的方法——這已經是 MVP 的責任邊界（Presenter 主動命令 View 做事），不是 MVVM 的被動資料流。用 <code>weak var delegate</code> 只解決 retain cycle，不影響「ViewModel 是否認識 View」這個架構歸屬問題。</p>
+        <p>相對地，用 closure 綁定（<code>viewModel.onUserUpdated = { user in ... }</code>）時，ViewModel 只是把一個值透過 closure 丟出去，它不知道這個 closure 裡面做了什麼、也不知道是誰設的——這保留了 MVVM 該有的「View 不透明」特性。這個對照可以參考你自己筆記 [[MVVM]] 裡對 closure vs delegate 綁定方式的整理，裡面也記了這篇討論的原始出處。</p>
+        <div class="followup">面試官可能追問：「那 RxSwift 的 <code>Observable&lt;User&gt;</code> 綁定算哪一種？」— 算 MVVM，甚至更純粹：ViewModel 只 expose 一個 stream，完全不知道有沒有人訂閱、訂閱的人是誰、訂閱後做了什麼，資料流方向與知情範圍都比 closure 更嚴格地單向。</div>
+      </div>
     </div>
-    <div class="explain">
-      <div class="verdict"></div>
-      <p>這是面試官很愛問的「為什麼」而不是「怎麼修」：self-sizing 的本質是系統在 <code>cellForRow</code> 之後呼叫 <code>cell.systemLayoutSizeFitting(_:)</code>，讓 Auto Layout 引擎實際求解一次 constraint system 才能得到 intrinsic content size。這個求解成本隨 constraint 數量增加而快速上升，25 個 constraints 屬於偏重的量級。同時 <code>estimatedRowHeight</code> 只是一個「預估值」，如果跟實際高度差太多（這裡差了 4 倍），滾動過程中系統要不斷用估計值排版、拿到真實高度後又重新調整，造成 scroll indicator 跳動與額外的 layout pass——這兩件事是分開但會疊加的成本，不是同一個問題的兩種說法。</p>
-      <p class="note-ref">相關筆記：[[UITableView-UICollectionView 效能優化]]</p>
-      <div class="followup"><strong>面試官可能追問：</strong>「如果不能減少 constraint 數量，還有什麼優化方向？」→ 手動快取已計算過的高度（<code>[IndexPath: CGFloat]</code>）、把 <code>estimatedRowHeight</code> 設成接近實際平均值、或改用 <code>sizeThatFits(_:)</code> 手動計算取代讓 Auto Layout 引擎求解。</div>
+
+    <!-- Q2 -->
+    <div class="card" id="q2">
+      <span class="q-tag">架構設計 · 方案 trade-off</span>
+      <div class="q-text">Q2. 你的 App 目前用 MVVM，Model 層直接讓 ViewModel import 並呼叫 <code>URLSession</code> 發 API request。主管建議導入 Clean Architecture 的 UseCase + Repository 分層。在一個 3 人團隊、功能仍快速迭代中的產品，這個建議最主要的價值該怎麼講？</div>
+      <div class="options">
+        <button class="option" data-correct="false">A. UseCase + Repository 一定能讓程式碼行數變少，直接降低維護成本</button>
+        <button class="option" data-correct="true">B. 把「取得資料的商業邏輯」和「資料從哪來（網路/DB/cache）」拆開，讓 ViewModel 不直接依賴 URLSession，換資料來源或寫測試時不需要動到 ViewModel 或啟動真實網路</button>
+        <button class="option" data-correct="false">C. Clean Architecture 是業界公認最佳實踐，任何規模的專案都應該無條件採用，越早導入越好</button>
+        <button class="option" data-correct="false">D. 分層之後 App 的執行效能會提升，因為每一層都可以獨立做效能優化</button>
+      </div>
+      <div class="explain">
+        <div class="label">解析</div>
+        <p><b>正解 B。</b>Clean Architecture 分層的價值不是「程式碼變少」或「效能變好」，而是<b>依賴方向的控制</b>：讓 ViewModel（or Presenter）依賴一個抽象的 <code>UserRepository</code> protocol，而不是具體的 <code>URLSession</code>。這樣做測試時可以直接注入 mock repository，不需要啟動真實網路請求；未來如果資料來源改變（加上 local cache、換成 GraphQL、offline-first），只需要改 Repository 的實作，UseCase 和 ViewModel 完全不用動。這正是你在 [[Dependency Injection (DI)]] 筆記裡記錄的 protocol-based DI 精神——把「誰提供這個能力」和「怎麼使用這個能力」解耦。</p>
+        <p>C 選項是常見的過度推論陷阱：架構決策沒有「業界最佳實踐、無條件套用」這種答案，永遠是 trade-off——3 人團隊快速迭代期，多一層 UseCase/Repository 意味著新增功能要多寫幾個檔案、多一層心智負擔，如果 ViewModel 目前只有 1-2 個資料來源且沒有測試需求，過度分層反而拖慢迭代速度。真正該問的是：「這個產品現在或可預期的未來，是否有『需要替換資料來源』或『需要單元測試覆蓋商業邏輯』的實際需求？」如果有，分層的投資才划算。</p>
+        <div class="followup">面試官可能追問：「如果現在專案還小，你會直接導入完整 Clean Architecture 嗎？」— 更務實的答案是漸進式：先把「網路呼叫」抽成 protocol（Repository 雛形），確保 ViewModel 不直接 import URLSession；等真的出現多資料來源或測試覆蓋的需求時，再補上 UseCase 層。避免一開始就過度設計。</div>
+      </div>
     </div>
-  </div>
 
-  <div class="question">
-    <div class="q-title">Q2. 設計師要求卡片有陰影效果，你這樣寫，結果在 Instruments 的 Core Animation 工具裡看到大片黃色（Color Offscreen-Rendered）：
-      <pre><code>layer.shadowColor = UIColor.black.cgColor
-layer.shadowOffset = CGSize(width: 0, height: 2)
-layer.shadowRadius = 4
-layer.shadowOpacity = 0.3
-// 沒有設定 shadowPath</code></pre>
-      下列哪個修法最直接對症下藥，且說明了正確的原因？
+    <!-- Q3 random -->
+    <div class="card" id="q3">
+      <span class="q-tag">隨機主題：RxSwift · 實務情境判斷</span>
+      <div class="q-text">Q3. 你的 ViewModel 有一個 <code>let userTapped = PublishSubject&lt;Void&gt;()</code> 當作 Input，多個 UI 元件（button 的 <code>rx.tap</code>）都綁定到它。某次重構後，某個 button 的 <code>rx.tap.bind(to: userTapped).disposed(by: bag)</code> 少接了 <code>disposed(by:)</code>，結果什麼問題最可能發生？</div>
+      <div class="options">
+        <button class="option" data-correct="false">A. App 會立即 crash，因為 PublishSubject 沒有 disposed 就不能被訂閱</button>
+        <button class="option" data-correct="true">B. 這個訂閱的生命週期不會隨著 VC/cell 一起結束，可能造成訂閱者比預期活得更久（例如 VC 已經 dealloc，訂閱仍在 Subject 的 observer bag 裡持續存在），進而在錯誤的時機觸發已經不該存在的邏輯，甚至導致記憶體無法釋放</button>
+        <button class="option" data-correct="false">C. 沒有影響，PublishSubject 訂閱不論有沒有 disposed，都會在 Subject 被 deinit 時自動清除</button>
+        <button class="option" data-correct="false">D. Subject 會因為缺少 disposed 呼叫而無法接收後續的 tap 事件</button>
+      </div>
+      <div class="explain">
+        <div class="label">解析</div>
+        <p><b>正解 B。</b>沒接 <code>disposed(by:)</code> 不代表立即 crash，也不是 Subject 自動清除——訂閱本身建立的 closure 會被存進 <code>PublishSubject</code> 內部的 observers bag（一份記錄所有訂閱者的清單），這是「被全域/長生命週期物件延長生命週期的單向強引用鏈」，跟兩個物件互相持有的 retain cycle（封閉互相持有）是不同機制：這裡沒有「互相」持有，只有 Subject 單向地一直記著這個訂閱，只要 Subject 還活著，訂閱者的 closure 就不會被釋放。</p>
+        <p>如果這個 closure 捕捉了 <code>self</code>（VC 或某個 view），即便 VC 已經從畫面移除，只要 ViewModel（進而 Subject）還活著，這個 closure 對 <code>self</code> 的強引用鏈就還在，導致 VC 無法被釋放——這是記憶體洩漏，但成因跟「A 持有 B、B 持有 A」的封閉環不同，解析與修法不能混用這兩種機制的說法。這題呼應你在 [[RxSwift]] 筆記中對 DisposeBag 管理生命週期的重點：每個訂閱都該綁定到一個明確的生命週期範圍（VC 的 bag 或 cell 重用時重建的 bag），不接 <code>disposed(by:)</code> 幾乎永遠是疏忽而非設計選擇。</p>
+        <div class="followup">面試官可能追問：「如果是 cell 裡的 rx.tap 綁定，忘記 disposed 有什麼特別的風險？」— cell 重用時如果沒有在 <code>prepareForReuse</code> 重建 DisposeBag，舊的訂閱會持續疊加，同一個 tap 事件可能觸發多次過期的 handler，這是 UITableView/UICollectionView cell 重用場景下最常見的 Rx 陷阱。</div>
+      </div>
     </div>
-    <div class="options">
-      <button class="option" data-correct="false">把 <code>shadowOpacity</code> 調低到 0.1 即可解決，因為 offscreen rendering 只跟透明度有關</button>
-      <button class="option" data-correct="true">設定 <code>layer.shadowPath</code>：因為沒有 shadowPath 時，render server 必須先把整個 layer（含子 layer）畫到 offscreen buffer，才能從中算出精確的 alpha 輪廓來決定陰影形狀；提供明確的 path 後，GPU 可以直接依照這個路徑畫陰影，不需要額外的 offscreen pass</button>
-      <button class="option" data-correct="false">改用 <code>masksToBounds = true</code> 取代 shadow 相關屬性，效能會自動改善</button>
-      <button class="option" data-correct="false">Offscreen rendering 只發生在 Simulator，真機上不會有這個問題，可以忽略</button>
-    </div>
-    <div class="explain">
-      <div class="verdict"></div>
-      <p>Shadow 沒有指定 <code>shadowPath</code> 時，GPU 沒辦法「猜」出 layer 的輪廓要怎麼畫陰影，只能先把整個 layer tree 完整渲染到一個暫時的 offscreen buffer，再從裡面推算出 alpha 輪廓，這一整套流程包含額外的記憶體分配、context switching、以及多一次完整的 rendering pass。加上 <code>shadowPath</code> 之後，GPU 直接照著你給的路徑畫陰影，完全跳過那次額外渲染。要注意如果卡片的 bounds 會隨 Auto Layout 變動（例如 self-sizing cell），<code>shadowPath</code> 必須在 <code>layoutSubviews</code> 裡跟著更新，否則陰影形狀會跟畫面對不上。</p>
-      <p class="note-ref">相關筆記：[[離屏渲染與 Core Animation 效能]]</p>
-      <div class="followup"><strong>面試官可能追問：</strong>「那 <code>cornerRadius</code> 加 <code>masksToBounds</code> 呢，一定會觸發 offscreen rendering 嗎？」→ 不一定。iOS 13+ 對「只裁切 backgroundColor/borderWidth，沒有子 view 需要裁切」的情況做了優化不再觸發；只有當 layer 有子 view 或 contents 需要被裁切、且設了 <code>masksToBounds</code> 時才會觸發。</div>
-    </div>
-  </div>
+  </section>
 
-  <div class="question">
-    <div class="q-title">Q3.（隨機主題：記憶體管理）以下 ViewModel 只在 <code>viewDidLoad</code> 訂閱了 <strong>App 層級 singleton</strong> 的 <code>UserSession.shared.stateRelay</code>（不是自己的 property），畫面 pop 離開後 <code>deinit</code> 沒有被呼叫。<code>disposeBag</code> 有正確在 <code>deinit</code> 前被釋放。下列哪個說法正確描述了這個現象的機制？
-      <pre><code>class ProfileViewModel {
-    let disposeBag = DisposeBag()
+  <!-- ============ Part 2: 後端必備知識 ============ -->
+  <section>
+    <div class="section-title">🌐 後端必備知識</div>
+    <div class="section-sub">1-6 GraphQL 與 gRPC 概觀：與 REST 的取捨</div>
 
-    func bind() {
-        UserSession.shared.stateRelay
-            .subscribe(onNext: { [weak self] state in
-                self?.apply(state)
-            })
-            .disposed(by: disposeBag)
-    }
-    deinit { print("🗑️ deinit") }
-}</code></pre>
-    </div>
-    <div class="options">
-      <button class="option" data-correct="false">這是典型的 retain cycle：<code>ViewModel → disposeBag → Disposable → closure → ViewModel</code> 形成封閉循環，跟訂閱自己的 Relay 是同一種機制</button>
-      <button class="option" data-correct="false">因為用了 <code>[weak self]</code>，理論上 deinit 一定會被正確呼叫，題目描述的現象不可能發生</button>
-      <button class="option" data-correct="true">既然已經用了 <code>[weak self]</code> 且 <code>disposeBag</code> 有正常釋放，closure 不會強捕獲 self，這條路徑不會阻止 deinit；如果 deinit 真的沒被呼叫，問題應該往別處找（例如 ViewController 本身被其他強引用鏈卡住，或 <code>apply(state)</code> 內部又產生了新的強引用），而不是這段訂閱程式碼本身</button>
-      <button class="option" data-correct="false"><code>UserSession.shared</code> 是 singleton，訂閱 singleton 的 Relay 本質上就是 retain cycle，這是 Swift 語言層級的限制，跟有沒有 <code>[weak self]</code> 無關</button>
-    </div>
-    <div class="explain">
-      <div class="verdict"></div>
-      <p>這題刻意反著問，用來檢查「是否真的理解機制，還是背了『訂閱 singleton 會漏』這種片面結論」。正確的判讀框架是分清楚三種不同的「物件死不掉」：<strong>真環（retain cycle）</strong>是封閉的互相持有（例如訂閱自己的 Relay 又強捕獲 self）；<strong>假環（全域根強鏈）</strong>是被活得比你久的全域物件單向持有（例如訂閱 singleton 的 subject、repeating Timer 的 target、NotificationCenter observer），這種情況下即使沒有互相持有，只要 closure 強捕獲了 self，一樣會讓 self 活到跟 singleton 一樣久；而題目給的程式碼因為已經正確用了 <code>[weak self]</code>，closure 根本沒有強捕獲 self，不管訂閱的是自己的 Relay 還是 singleton 的 Relay，這條路徑都不構成阻止 deinit 的原因。把「訂閱 singleton 一定漏」當成規則來背，會讓你在這種已經正確處理過的程式碼裡誤判出根本不存在的 bug。</p>
-      <p class="note-ref">相關筆記：[[引用鏈判讀：真環、假環與 struct 穿透]]、[[Retain Cycle 完整圖鑑]]</p>
-      <div class="followup"><strong>面試官可能追問：</strong>「如果拿掉 <code>[weak self]</code>，訂閱 singleton 的 Relay 會發生什麼事？」→ 會變成假環：<code>UserSession.shared → stateRelay → observers Bag → closure → self</code>，因為 <code>UserSession.shared</code> 是 App 級全域根，這條單向強鏈會讓 ViewModel 活到跟整個 App 一樣久，即使它不是封閉循環，也不會被 ARC 自動偵測或回收。</div>
-    </div>
-  </div>
-</section>
+    <div class="card">
+      <p>前面五節都在談 REST，這節把視野拉開：REST 不是唯一解法。GraphQL 和 gRPC 都是為了解決 REST 在<b>特定場景</b>下的限制而生的，理解它們的差異，最終還是為了回答同一個問題——「這個 API 該怎麼設計？」</p>
 
-<!-- ============ Part 2: 後端必備知識 ============ -->
-<section>
-  <h2>🌐 後端必備知識 <span class="badge">1-3 TLS 與 HTTPS</span></h2>
-  <div class="section-desc">Stage 1：HTTP 與 Web 基礎</div>
+      <h4>REST 的兩個典型痛點</h4>
+      <p>想像一個「貼文列表」畫面，你的 App 需要作者名字、貼文標題、前 3 則留言。用 REST，如果 <code>GET /posts</code> 只回傳貼文本體，你還得再打 <code>GET /users/:id</code> 和 <code>GET /posts/:id/comments</code>——一個畫面打 3 個 API，這是 <b>under-fetching</b>。反過來，如果 <code>GET /posts</code> 把作者的 30 個欄位全部塞進 response，但畫面只需要名字，這是 <b>over-fetching</b>——行動網路下，多餘的 bytes 都是真實的流量與電量成本。</p>
 
-  <article class="backend-content">
-    <p>昨天談完 HTTP 怎麼「送資料更快」，今天談送資料「怎麼安全」。HTTPS 就是 HTTP + TLS——TLS 在 TCP 之上加了三個保證：<strong>機密性</strong>（第三方看不到內容）、<strong>完整性</strong>（內容沒被竄改）、<strong>身份驗證</strong>（你連的真的是那台 server，不是冒充的）。這對 App 工程師來說不只是「後端的事」：你在 <code>URLSession</code> 裡處理的 <code>URLAuthenticationChallenge</code>、Certificate Pinning 的實作，都是直接站在這套機制上面。</p>
+      <svg viewBox="0 0 640 260" xmlns="http://www.w3.org/2000/svg">
+        <text x="10" y="16" class="svg-title">情境：同一個畫面需要「貼文 + 作者名字 + 前 3 則留言」</text>
 
-    <h3>先看一個具體場景：App 打開時第一次連線</h3>
-    <p>假設你的 App 冷啟動後第一次呼叫 <code>GET /api/profile</code>。在 TCP 三次握手完成之後，TLS 握手才開始——這是額外疊加的一層，每多一輪來回（RTT）都是實打實的延遲，在行動網路上尤其有感。TLS 1.2 需要 <strong>2-RTT</strong> 才能開始傳真正的資料：</p>
+        <text x="10" y="40" font-weight="bold" font-size="12">REST：3 次獨立 request，各自回傳完整 resource</text>
+        <rect x="10" y="50" width="130" height="26" rx="4" fill="currentColor" fill-opacity="0.12"/>
+        <text x="75" y="67" text-anchor="middle" font-size="10">GET /posts</text>
+        <rect x="160" y="50" width="150" height="26" rx="4" fill="currentColor" fill-opacity="0.12"/>
+        <text x="235" y="67" text-anchor="middle" font-size="10">GET /users/:id（30 欄位）</text>
+        <rect x="330" y="50" width="180" height="26" rx="4" fill="currentColor" fill-opacity="0.12"/>
+        <text x="420" y="67" text-anchor="middle" font-size="10">GET /posts/:id/comments</text>
+        <text x="10" y="95" font-size="10" fill="#c8372f">⚠ 3 次網路往返；user 欄位 over-fetch，comments 若只要前 3 則卻拿到全部是 under/over 混合</text>
 
-    <div class="diagram-wrap">
-      <svg viewBox="0 0 620 260" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, sans-serif">
-        <text x="90" y="20" font-size="12" fill="currentColor" text-anchor="middle" font-weight="600">Client (App)</text>
-        <text x="530" y="20" font-size="12" fill="currentColor" text-anchor="middle" font-weight="600">Server</text>
-        <line x1="90" y1="30" x2="90" y2="245" stroke="currentColor" stroke-opacity="0.3" stroke-width="1.5"/>
-        <line x1="530" y1="30" x2="530" y2="245" stroke="currentColor" stroke-opacity="0.3" stroke-width="1.5"/>
+        <text x="10" y="130" font-weight="bold" font-size="12">GraphQL：1 次 request，client 指定欄位形狀</text>
+        <rect x="10" y="140" width="600" height="80" rx="6" fill="none" stroke="currentColor" stroke-opacity="0.4"/>
+        <text x="20" y="158" font-size="10">query { post(id) {</text>
+        <text x="30" y="174" font-size="10">title, author { name }, comments(first: 3) { body } } }</text>
+        <text x="20" y="200" font-size="10" fill="#1a8f4c">→ Server 一次組好精確形狀的 JSON 回傳，1 次往返、剛好需要的欄位</text>
 
-        <line x1="90" y1="50" x2="530" y2="70" stroke="#409cff" stroke-width="2" marker-end="url(#arrow)"/>
-        <text x="95" y="46" font-size="11" fill="currentColor">ClientHello（支援的 cipher suites、Client Random）</text>
+        <text x="10" y="245" font-size="10" fill="currentColor" fill-opacity="0.6">gRPC 走另一條路：不追求「彈性查詢形狀」，而是用二進位 Protobuf 取代 JSON，讓固定形狀的呼叫更小更快（見下方時序圖）</text>
+      </svg>
 
-        <line x1="530" y1="90" x2="90" y2="110" stroke="#409cff" stroke-width="2" marker-end="url(#arrow2)"/>
-        <text x="300" y="86" font-size="11" fill="currentColor" text-anchor="middle">ServerHello + Certificate + ServerKeyExchange</text>
+      <h4>GraphQL：把「決定回傳什麼」的權力交給 client</h4>
+      <p>GraphQL 用一份 schema（型別系統，類似 Swift 的 protocol/struct 定義）描述所有可查詢的資料形狀，client 端寫 query 精確指定要哪些欄位，server 端每個欄位背後有一個 resolver 負責取值。這解決了 over/under-fetching，但引入了新問題：一個 list 裡每個 item 都去查一次關聯資料（例如每篇貼文都查一次作者），會變成 <b>N+1 查詢</b>，需要用 <code>DataLoader</code> 把同一輪次的查詢合併成一次批次查詢。這部分的完整 schema 範例、resolver 程式碼、DataLoader 原理，已經整理在你自己的筆記 [[GraphQL 深度解析]] 和 [[GraphQL on iOS]] 裡，包含 Apollo iOS 2.0 的 async/await 用法與 normalized cache 設計。</p>
 
-        <rect x="250" y="118" width="140" height="16" rx="8" fill="#34c759" fill-opacity="0.18"/>
-        <text x="320" y="130" font-size="10" fill="currentColor" text-anchor="middle">RTT 1 結束（明文）</text>
+      <h4>gRPC：把「格式」和「傳輸」都最佳化</h4>
+      <p>gRPC 走的是完全不同的路線：不追求查詢彈性，而是用 <b>Protocol Buffers</b>（二進位序列化格式）取代 JSON，並以 <b>function call 的思維</b>取代 REST 的 resource 思維——呼叫 <code>getUser(id:)</code> 而不是 <code>GET /users/:id</code>。二進位格式體積比 JSON 小、不需要 string parsing；搭配 HTTP/2 原生支援，還能做 4 種 streaming 模式（unary / server streaming / client streaming / bidirectional streaming），特別適合聊天、即時協作這類場景。</p>
 
-        <line x1="90" y1="148" x2="530" y2="168" stroke="#409cff" stroke-width="2" marker-end="url(#arrow)"/>
-        <text x="95" y="144" font-size="11" fill="currentColor">ClientKeyExchange + Finished（加密）</text>
+      <svg viewBox="0 0 640 200" xmlns="http://www.w3.org/2000/svg">
+        <text x="10" y="16" class="svg-title">情境：Client 持續發訊息、Server 也持續推播（Bidirectional Streaming）</text>
+        <rect x="10" y="40" width="90" height="30" rx="6" fill="none" stroke="currentColor" stroke-opacity="0.5"/>
+        <text x="55" y="60" text-anchor="middle" font-size="10">Client</text>
+        <rect x="540" y="40" width="90" height="30" rx="6" fill="none" stroke="currentColor" stroke-opacity="0.5"/>
+        <text x="585" y="60" text-anchor="middle" font-size="10">Server</text>
 
-        <line x1="530" y1="188" x2="90" y2="208" stroke="#409cff" stroke-width="2" marker-end="url(#arrow2)"/>
-        <text x="300" y="184" font-size="11" fill="currentColor" text-anchor="middle">Finished（加密）</text>
+        <line x1="100" y1="55" x2="540" y2="55" stroke="currentColor" stroke-opacity="0.15"/>
 
-        <rect x="230" y="216" width="180" height="16" rx="8" fill="#34c759" fill-opacity="0.18"/>
-        <text x="320" y="228" font-size="10" fill="currentColor" text-anchor="middle">RTT 2 結束 → 開始傳 App Data</text>
+        <line x1="100" y1="90" x2="540" y2="90" stroke="currentColor" stroke-opacity="0.5" marker-end="url(#arrow5)"/>
+        <text x="320" y="83" text-anchor="middle" font-size="10">msg₁（單一 HTTP/2 連線）</text>
+
+        <line x1="540" y1="120" x2="100" y2="120" stroke="currentColor" stroke-opacity="0.5" marker-end="url(#arrow5)"/>
+        <text x="320" y="113" text-anchor="middle" font-size="10">msg₂（同一條連線同時回推，不用等 msg₁ 有回應才能送）</text>
+
+        <line x1="100" y1="150" x2="540" y2="150" stroke="currentColor" stroke-opacity="0.5" marker-end="url(#arrow5)"/>
+        <text x="320" y="143" text-anchor="middle" font-size="10">msg₃</text>
+
+        <text x="10" y="185" font-size="10" fill="currentColor" fill-opacity="0.6">跟 REST 的一問一答不同：同一條連線上，雙方可以隨時各自推送，天然適合聊天室、多人協作、即時遊戲</text>
 
         <defs>
-          <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#409cff"/></marker>
-          <marker id="arrow2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M6,0 L0,3 L6,6 Z" fill="#409cff"/></marker>
+          <marker id="arrow5" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+            <path d="M0,0 L8,4 L0,8 z" fill="currentColor" fill-opacity="0.5"/>
+          </marker>
         </defs>
       </svg>
-      <div class="diagram-caption">TLS 1.2：2-RTT 才能開始傳輸應用層資料</div>
+
+      <p>你之前已經寫過 gRPC Swift 2（全面 async/await + AsyncSequence）的完整筆記 [[gRPC on iOS]]，裡面涵蓋 Protobuf 的 field number 設計、四種 streaming 模式的程式碼範例、以及 Apple 在 WWDC26 推廣 gRPC Swift 的脈絡，值得對照複習。</p>
+
+      <h4>三者怎麼選：一張表看懂 trade-off</h4>
+      <p>REST 學習成本最低、生態最成熟，適合公開 API 和簡單 CRUD；GraphQL 適合資料形狀多變、多種 UI 消費同一份資料的場景（BFF 層常見選擇）；gRPC 適合你自己控制前後端、追求效能與原生 streaming 的內部服務通訊。三者不是互斥——很多系統是「對外用 REST、內部微服務間用 gRPC、給前端的 BFF 層用 GraphQL 聚合」。</p>
     </div>
 
-    <p>關鍵瓶頸在於 TLS 1.2 的握手是「一來一往、逐步確認」：Client 先問 server 支援什麼，server 回覆選定的版本與 certificate，Client 驗證完才能送出 key exchange 資料，server 再確認一次——完整跑完要兩輪。TLS 1.3 把這個流程重新設計，讓 Client 在 <strong>第一則訊息</strong>就直接帶上自己的 DH public key（<code>key_share</code>），不用等 server 先選好演算法再送，因此壓縮成 <strong>1-RTT</strong>，甚至對「回頭客」（曾經連過的 session）可以做到 <strong>0-RTT</strong>：</p>
+    <div class="card quiz-mini">
+      <h4>小測驗</h4>
 
-    <div class="diagram-wrap">
-      <svg viewBox="0 0 620 200" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, sans-serif">
-        <text x="90" y="20" font-size="12" fill="currentColor" text-anchor="middle" font-weight="600">Client (App)</text>
-        <text x="530" y="20" font-size="12" fill="currentColor" text-anchor="middle" font-weight="600">Server</text>
-        <line x1="90" y1="30" x2="90" y2="185" stroke="currentColor" stroke-opacity="0.3" stroke-width="1.5"/>
-        <line x1="530" y1="30" x2="530" y2="185" stroke="currentColor" stroke-opacity="0.3" stroke-width="1.5"/>
-
-        <line x1="90" y1="55" x2="530" y2="75" stroke="#34c759" stroke-width="2" marker-end="url(#arrow3)"/>
-        <text x="95" y="51" font-size="11" fill="currentColor">ClientHello + key_share（直接送 DH public key）</text>
-
-        <line x1="530" y1="95" x2="90" y2="115" stroke="#34c759" stroke-width="2" marker-end="url(#arrow4)"/>
-        <text x="300" y="91" font-size="11" fill="currentColor" text-anchor="middle">ServerHello + key_share + 加密的 Certificate + Finished</text>
-
-        <rect x="250" y="123" width="140" height="16" rx="8" fill="#34c759" fill-opacity="0.18"/>
-        <text x="320" y="135" font-size="10" fill="currentColor" text-anchor="middle">RTT 1 結束</text>
-
-        <line x1="90" y1="155" x2="530" y2="155" stroke="#34c759" stroke-width="2" marker-end="url(#arrow3)"/>
-        <text x="300" y="150" font-size="11" fill="currentColor" text-anchor="middle">Finished → 直接開始 App Data（加密）</text>
-
-        <defs>
-          <marker id="arrow3" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#34c759"/></marker>
-          <marker id="arrow4" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M6,0 L0,3 L6,6 Z" fill="#34c759"/></marker>
-        </defs>
-      </svg>
-      <div class="diagram-caption">TLS 1.3：1-RTT，且從 EncryptedExtensions 開始整段都是加密的</div>
-    </div>
-
-    <p>除了少一輪 RTT，TLS 1.3 還把 <code>Certificate</code> 這類敏感資訊改成加密傳輸（TLS 1.2 是明文送出 certificate chain，任何中間節點都看得到你連的是哪個網域），並且移除了一批已知不安全的演算法（RSA key exchange、CBC 模式、SHA-1），強制要求 <strong>Forward Secrecy</strong>——每次連線用臨時產生的 ephemeral key，即使 server 的長期 private key 未來洩漏，過去被側錄的流量也無法被回頭解密。</p>
-
-    <h3>Certificate Chain：為什麼 App 要信任一份「陌生」的憑證</h3>
-    <p>Server 送來的 certificate 不是憑空可信的，而是靠一條 <strong>信任鏈</strong> 逐層驗證回到系統內建的 Root CA：</p>
-    <pre><code>Root CA（預裝在 iOS 系統，Apple 管理）
-   └─ Intermediate CA（Root CA 簽發）
-        └─ Server Certificate（api.yourapp.com，Intermediate CA 簽發）</code></pre>
-    <p>驗證時要逐層確認 signature、有效期、網域是否匹配，直到鏈頂的 Root CA 出現在系統信任清單裡才算過。這也是為什麼「開發環境用自簽 certificate 導致連線失敗」——自簽憑證沒有任何 CA 簽發，鏈直接斷在半路，系統當然不信任。</p>
-
-    <h3>那 Certificate Pinning 又是為了防什麼？</h3>
-    <p>標準 TLS 驗證回答的問題是「這張憑證是被信任的 CA 簽的嗎？」，但如果使用者手機被裝了惡意 root CA（常見於某些 MDM 或惡意軟體），或是某個 CA 本身被入侵、簽發了假憑證，攻擊者一樣能提供一張「合法但假」的憑證通過標準驗證，做中間人攻擊（MITM）。Certificate Pinning 回答的是另一個更嚴格的問題：「這張憑證是不是我事先預期的那一張／那把公鑰？」——即使是合法 CA 簽的其他憑證也一律拒絕。這是防禦層級的差異，不是同一件事的兩種說法。</p>
-
-    <h3>iOS 端的落地：ATS 與 URLSessionTaskMetrics</h3>
-    <p>iOS 9 起預設啟用 <strong>ATS（App Transport Security）</strong>，強制要求 HTTPS、TLS 1.2 以上、Forward Secrecy、以及最低金鑰長度，等於把上面這些安全底線直接內建在系統層級，你不需要每個 App 都自己檢查一遍。如果想確認實際連線用的是哪個 TLS 版本，可以在 <code>didFinishCollecting metrics:</code> 裡讀 <code>transaction.negotiatedTLSProtocolVersion</code>；想觀察握手花了多久，可以比較 <code>secureConnectionStartDate</code> 和 <code>secureConnectionEndDate</code> 的差值——這在 debug「App 冷啟動第一個 API 特別慢」時很有用，往往就是 TLS 握手加上 DNS 查詢疊加起來的延遲。</p>
-  </article>
-
-  <details>
-    <summary>📝 小測驗（3 題，點擊展開作答）</summary>
-    <div class="question" style="border-top:none; padding-top:8px; margin-top:8px;">
-      <div class="q-title">B1. TLS 1.3 相較 TLS 1.2，握手 RTT 數量減少的關鍵原因是什麼？</div>
-      <div class="options">
-        <button class="option" data-correct="false">TLS 1.3 完全取消了 Certificate 驗證流程，所以少一輪來回</button>
-        <button class="option" data-correct="true">Client 在第一則 ClientHello 訊息就直接帶上 <code>key_share</code>（自己的 DH public key），不需要等 Server 先確認選用哪種 cipher suite 之後才送出 key exchange 資料，讓雙方能在 1-RTT 內就完成金鑰協商</button>
-        <button class="option" data-correct="false">TLS 1.3 改用 UDP 傳輸，天生比 TCP 少一輪握手</button>
-        <button class="option" data-correct="false">TLS 1.3 不再需要驗證 certificate chain 的有效期</button>
+      <div id="b1">
+        <div class="q-text" style="font-size:14.5px;">B1. GraphQL 解決的「over-fetching」和「under-fetching」分別指什麼？</div>
+        <div class="options">
+          <button class="option" data-correct="false">A. Over-fetching 是伺服器過載，under-fetching 是頻寬不足</button>
+          <button class="option" data-correct="true">B. Over-fetching 是 response 帶了用不到的欄位；under-fetching 是一個畫面要打多支 API 才能拿齊資料</button>
+          <button class="option" data-correct="false">C. 兩者都是指同一件事：API 回傳資料量太少</button>
+        </div>
+        <div class="explain">
+          <div class="label">解析</div>
+          <p>B 正確。Over-fetching：resource 回傳整包但你只用到幾個欄位（浪費頻寬）；under-fetching：一個 resource 拿不到全部你要的資料，要多打幾支 API 補齊（浪費往返次數）。GraphQL 讓 client 一次 query 精確指定欄位，同時解決兩者。</p>
+        </div>
       </div>
-      <div class="explain">
-        <div class="verdict"></div>
-        <p>TLS 1.2 之所以要 2-RTT，是因為 Client 要先知道 Server 選定的 cipher suite 之後，才能送出對應的 key exchange 參數。TLS 1.3 讓 Client 主動先猜測（實務上幾乎都猜對，因為支援的曲線很集中）並直接把 <code>key_share</code> 塞進第一則訊息，Server 收到後可以立刻回覆自己的 <code>key_share</code> 加上已經加密的 Certificate，完成 1-RTT。Certificate 驗證流程仍然存在，只是被加密保護且塞進同一輪 RTT 內。UDP 傳輸是 HTTP/3 的 QUIC 層面的事，跟 TLS 1.3 是否用 TCP 無關（TLS 1.3 一樣可以跑在 TCP 之上）。</p>
+
+      <div id="b2" style="margin-top:18px;">
+        <div class="q-text" style="font-size:14.5px;">B2. GraphQL 的 N+1 問題最根本的成因是什麼？</div>
+        <div class="options">
+          <button class="option" data-correct="false">A. Client 端的 query 寫得太深，超過 server 允許的深度限制</button>
+          <button class="option" data-correct="true">B. 一個 list 裡的每個 item，各自的關聯欄位（如 author）都獨立觸發一次資料庫查詢，沒有把同一輪次的查詢合併批次處理</button>
+          <button class="option" data-correct="false">C. GraphQL server 預設沒有做任何 caching，導致每個欄位都重新計算</button>
+        </div>
+        <div class="explain">
+          <div class="label">解析</div>
+          <p>B 正確。resolver 是逐欄位執行的，如果 <code>Post.author</code> resolver 沒有做批次處理，10 篇貼文就觸發 10 次獨立查詢。DataLoader 把同一個 event loop tick 內的多次查詢請求合併成一次 <code>WHERE id IN (...)</code>，解決這個問題。</p>
+        </div>
+      </div>
+
+      <div id="b3" style="margin-top:18px;">
+        <div class="q-text" style="font-size:14.5px;">B3. 為什麼 gRPC 特別適合聊天室這類即時雙向通訊的場景，而不是靠 REST + 輪詢？</div>
+        <div class="options">
+          <button class="option" data-correct="false">A. gRPC 的 Protobuf 格式比 JSON 更容易被人閱讀，方便 debug</button>
+          <button class="option" data-correct="true">B. gRPC 基於 HTTP/2 提供原生的 bidirectional streaming，雙方可以在同一條連線上隨時互相推送資料，不需要像 REST 輪詢那樣反覆建立請求</button>
+          <button class="option" data-correct="false">C. gRPC 不需要伺服器維持任何連線狀態，天生比 REST 省資源</button>
+        </div>
+        <div class="explain">
+          <div class="label">解析</div>
+          <p>B 正確。REST 一問一答的模型要做「即時」只能靠輪詢（浪費資源）或另外接 WebSocket；gRPC 的四種 streaming 模式（尤其 bidirectional streaming）是協議原生支援的，同一條 HTTP/2 連線雙方隨時互推資料，天然適合聊天、協作、遊戲。</p>
+        </div>
       </div>
     </div>
-    <div class="question">
-      <div class="q-title">B2. 什麼是 Forward Secrecy？它保護的是哪種情境？</div>
-      <div class="options">
-        <button class="option" data-correct="false">保證封包在傳輸過程中不會遺失</button>
-        <button class="option" data-correct="true">每次連線使用臨時產生的 ephemeral key 進行金鑰交換（如 ECDHE），使得即使 server 的長期 private key 未來洩漏，過去已經加密傳輸並被側錄下來的歷史流量，攻擊者依然無法回頭解密</button>
-        <button class="option" data-correct="false">保證 certificate 永遠不會過期</button>
-        <button class="option" data-correct="false">防止使用者的裝置被安裝惡意的 root CA</button>
+  </section>
+
+  <!-- ============ Part 3: 演算法 ============ -->
+  <section>
+    <div class="section-title">🧩 演算法</div>
+    <div class="section-sub">題型輪替：Linked List（第一次出現 → <span class="badge-easy">Easy</span>）</div>
+
+    <div class="card">
+      <div class="algo-desc">
+        <b>LeetCode 206. Reverse Linked List</b><br>
+        給定一個單向鏈結串列的 head node，請將整個串列反轉，回傳反轉後的 head。
+        <br><br>
+        <pre><code>輸入: head = [1,2,3,4,5]
+輸出: [5,4,3,2,1]
+
+輸入: head = [1,2]
+輸出: [2,1]
+
+輸入: head = []
+輸出: []</code></pre>
+        進階要求：先想出迭代解（O(1) 額外空間），再想遞迴解（O(n) call stack）。
       </div>
-      <div class="explain">
-        <div class="verdict"></div>
-        <p>如果 key exchange 用的是固定的 RSA 長期金鑰，一旦這把 private key 未來洩漏，攻擊者可以拿它回頭解密所有曾經側錄下來的加密流量（因為每次連線用的都是同一把金鑰衍生的 pre-master secret）。Forward Secrecy 靠每次連線都產生一組全新、用完即丟的 ephemeral key pair（ECDHE 的「E」），讓每次連線的金鑰互相獨立，過去的流量不會因為未來金鑰外洩而被回溯破解。這跟封包遺失重傳、certificate 效期、惡意 root CA 都是不同層面的問題。</p>
-      </div>
-    </div>
-    <div class="question">
-      <div class="q-title">B3. Certificate Pinning 和標準的 TLS Certificate 驗證，兩者的差異是什麼？</div>
-      <div class="options">
-        <button class="option" data-correct="false">兩者其實是同一件事的不同名稱，沒有實質差異</button>
-        <button class="option" data-correct="true">標準 TLS 驗證只確認「這張憑證是不是被系統信任的 CA 簽發的」；Certificate Pinning 更進一步要求「這張憑證（或其公鑰）是不是 App 事先寫死、預期的那一張」，即使是合法 CA 簽發的其他憑證也拒絕，用來防禦 CA 被入侵或裝置被安裝惡意 root CA 造成的中間人攻擊</button>
-        <button class="option" data-correct="false">Certificate Pinning 是用來加速 TLS 握手的效能優化技巧，跟安全驗證無關</button>
-        <button class="option" data-correct="false">標準 TLS 驗證只在 debug 模式生效，Certificate Pinning 才是 production 唯一的驗證機制</button>
-      </div>
-      <div class="explain">
-        <div class="verdict"></div>
-        <p>標準 TLS 驗證的信任基礎是「這張證書的簽發鏈可以回溯到系統信任的 Root CA」，但這個信任模型有個前提：所有 CA 都值得信任、都不會被騙或被駭。Certificate Pinning 不依賴這個前提，直接把「我只信任這一張特定憑證（或其 public key）」寫死在 App 裡，即使攻擊者用合法 CA 簽出的假憑證，也因為跟 App 內建的不一致而被拒絕。代價是 certificate 更新或 key rotation 時，如果沒有妥善規劃，可能導致 App 直接無法連線，需要搭配版本更新或多組備援 pin。</p>
-      </div>
-    </div>
-  </details>
-</section>
 
-<!-- ============ Part 3: 演算法 ============ -->
-<section>
-  <h2>🧩 演算法 <span class="badge">Sliding Window · Easy</span></h2>
-  <div class="section-desc">題型輪替 #3，第一次出，難度 Easy</div>
-
-  <div class="question">
-    <div class="q-title">
-      <strong>Longest Substring Without Repeating Characters（最長不重複子字串）</strong><br>
-      給定一個字串 <code>s</code>，找出其中不含重複字元的最長子字串長度。
-      <pre><code>輸入: s = "abcabcbb"
-輸出: 3
-解釋: 最長不重複子字串是 "abc"，長度為 3
-
-輸入: s = "bbbbb"
-輸出: 1
-解釋: 最長不重複子字串是 "b"，長度為 1
-
-輸入: s = "pwwkew"
-輸出: 3
-解釋: 最長不重複子字串是 "wke"，長度為 3</code></pre>
-    </div>
-
-    <details>
-      <summary>💡 提示 1：思考方向</summary>
-      <p>最直覺的解法是對每個起點都往右掃到出現重複字元為止，記錄最長長度——但這樣每個起點都要重新掃一次，時間複雜度是 O(n²)。想想看：當你從某個起點往右掃，發現第一次出現重複字元時，下一次真的需要把起點退回「原本起點 +1」，重新從頭掃一次嗎？還是說，你其實已經知道「不含重複字元」的區間上一次延伸到哪裡了，可以直接利用這個資訊？</p>
-    </details>
-
-    <details>
-      <summary>🔍 提示 2：關鍵觀察</summary>
-      <p>用一個「視窗」（sliding window）維護目前正在檢查、不含重複字元的區間 <code>[left, right]</code>，搭配一個 <code>Set</code>（或 <code>[Character: Int]</code> 記錄字元最後出現的位置）：</p>
-      <ul>
-        <li><code>right</code> 一路往右擴張視窗，每次把新字元加進去</li>
-        <li>如果新字元在目前視窗內已經出現過，代表視窗不能再涵蓋這個重複的位置——不用把 <code>left</code> 退回起點重新掃，而是直接把 <code>left</code> 跳到「重複字元上次出現位置的下一格」，視窗只往前收縮到剛好排除重複，不多不少</li>
-        <li>每次視窗合法（無重複）時，用 <code>right - left + 1</code> 更新最長長度</li>
-      </ul>
-      <p>因為 <code>left</code> 和 <code>right</code> 都只會單調往右移動、各自最多走 n 步，整個過程只需要一次線性掃描，時間複雜度從 O(n²) 降到 O(n)。這是 sliding window 題型最典型的套路：用「維護一個滿足條件的區間，隨資料流動態伸縮邊界」取代「每個起點都重新算一次」。</p>
-    </details>
-
-    <details>
-      <summary>✅ 提示 3：參考解法（Swift）</summary>
-      <pre><code>func lengthOfLongestSubstring(_ s: String) -> Int {
-    let chars = Array(s)
-    var lastSeenIndex: [Character: Int] = [:]
-    var left = 0
-    var maxLength = 0
-
-    for right in 0..&lt;chars.count {
-        let c = chars[right]
-        if let seenAt = lastSeenIndex[c], seenAt >= left {
-            // 重複字元在目前視窗內，收縮 left 到它的下一格
-            left = seenAt + 1
-        }
-        lastSeenIndex[c] = right
-        maxLength = max(maxLength, right - left + 1)
+      <details>
+        <summary>提示 1：思考方向</summary>
+        <p>Linked list 反轉的本質是：把每個 node 的 <code>next</code> 指標方向「倒過來」。原本 <code>1 → 2 → 3</code>，反轉後要變成 <code>1 ← 2 ← 3</code>，也就是 <code>3 → 2 → 1</code>。難點在於：一旦你把某個 node 的 <code>next</code> 改指向前一個 node，你就失去了原本「往後走」的路——所以動手改之前，得先想清楚要保留哪些暫存指標，才不會斷鏈。</p>
+      </details>
+      <details>
+        <summary>提示 2：關鍵觀察</summary>
+        <p>用三個指標：<code>prev</code>（一開始是 <code>nil</code>，代表反轉後新串列的結尾）、<code>curr</code>（目前處理到的 node，一開始是 <code>head</code>）、<code>next</code>（暫存 <code>curr.next</code>，因為等一下要覆寫它）。每一輪迴圈做四件事：先存 <code>next = curr.next</code>（保命索），再把 <code>curr.next = prev</code>（真正的反轉動作），然後 <code>prev = curr</code>、<code>curr = next</code>（整體往前推進一格）。迴圈跑到 <code>curr == nil</code> 結束，此時 <code>prev</code> 就是新的 head。這跟你在 UIKit 裡处理 doubly-linked 結構（例如手刻 LRU Cache）時「動指標前一定要先存下一步要用的引用」的直覺是同一套原則。</p>
+      </details>
+      <details>
+        <summary>提示 3：參考解法（Swift）</summary>
+        <pre><code>// Definition for singly-linked list node
+class ListNode {
+    var val: Int
+    var next: ListNode?
+    init(_ val: Int) {
+        self.val = val
+        self.next = nil
     }
-    return maxLength
+}
+
+// 迭代解：O(n) 時間、O(1) 額外空間
+func reverseList(_ head: ListNode?) -> ListNode? {
+    var prev: ListNode? = nil
+    var curr = head
+
+    while curr != nil {
+        let next = curr?.next
+        curr?.next = prev
+        prev = curr
+        curr = next
+    }
+    return prev
+}
+
+// 遞迴解：O(n) 時間、O(n) call stack 空間
+func reverseListRecursive(_ head: ListNode?) -> ListNode? {
+    guard let head = head, let next = head.next else {
+        return head  // 空串列或只剩一個 node，本身就是反轉後的 head
+    }
+    let newHead = reverseListRecursive(next)
+    next.next = head   // 讓下一個 node 反過來指回自己
+    head.next = nil     // 自己變成新的尾巴，切斷原本往後的指標
+    return newHead
 }</code></pre>
-      <p>複雜度：時間 O(n)（<code>left</code>、<code>right</code> 各自單調遞增，總移動次數不超過 2n），空間 O(min(n, Σ))，Σ 是字元集大小（例如只有小寫英文字母時最多 26）。這裡有個容易忽略的細節：判斷重複時要檢查 <code>seenAt >= left</code>，而不是只檢查「這個字元有沒有出現過」——因為字元可能出現在目前視窗<strong>之前</strong>（已經被排除在視窗外），那種情況不算重複，不需要收縮 <code>left</code>。如果面試官追問「為什麼不能直接把 <code>left</code> 往前掃到找到重複為止」，可以強調這正是視窗維護「上次已知邊界」的價值——避免每次都要重新掃描。</p>
-    </details>
-  </div>
-</section>
+        <p style="margin-top:10px; font-size:13px; color:var(--text-dim);">複雜度：迭代解時間 O(n)、空間 O(1)；遞迴解時間 O(n)、空間 O(n)（call stack）。<code>ListNode</code> 是 class（reference type），這題也是觀察「多個變數持有同一個 heap 物件的引用」的好練習——<code>prev</code>、<code>curr</code>、<code>next</code> 三個變數在反轉過程中互相傳遞的是引用而非複製，這跟 Swift 的 struct/class 記憶體行為直接相關，可對照 [[Value Type vs Reference Type 的記憶體行為]]。這是 linked list 題型的基礎題，下次輪到時難度會升到 Medium（例如 Merge Two Sorted Lists 或 Remove Nth Node From End），三指標操作的手感要練到位。</p>
+      </details>
+    </div>
+  </section>
 
-<footer>Daily Learning · 自動產生於 2026-07-13</footer>
-
+  <footer>Daily Learning · Day 5 · 產生於 2026-07-16</footer>
 </div>
 
 <script>
-document.querySelectorAll('.question').forEach(function(q) {
-  var options = q.querySelectorAll('.option');
-  var explain = q.querySelector('.explain');
-  if (!options.length || !explain) return;
-
-  options.forEach(function(opt) {
-    opt.addEventListener('click', function() {
-      var isCorrect = opt.getAttribute('data-correct') === 'true';
-      options.forEach(function(o) { o.classList.add('disabled'); });
-
-      if (isCorrect) {
-        opt.classList.add('correct');
-      } else {
-        opt.classList.add('wrong');
-        var correctOpt = Array.prototype.find.call(options, function(o) {
-          return o.getAttribute('data-correct') === 'true';
+  document.querySelectorAll('.card:not(.quiz-mini), .quiz-mini > div').forEach(function(block) {
+    var buttons = block.querySelectorAll('.option');
+    if (!buttons.length) return;
+    var explain = block.querySelector('.explain');
+    buttons.forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        if (btn.disabled) return;
+        buttons.forEach(function(b) {
+          b.disabled = true;
+          if (b.dataset.correct === 'true') {
+            b.classList.add('correct');
+          } else if (b === btn) {
+            b.classList.add('wrong');
+          }
         });
-        if (correctOpt) correctOpt.classList.add('correct');
-      }
-
-      var verdict = explain.querySelector('.verdict');
-      if (verdict) {
-        if (isCorrect) {
-          verdict.textContent = '✅ 答對了';
-          verdict.className = 'verdict correct-text';
-        } else {
-          verdict.textContent = '❌ 答錯了，看看為什麼';
-          verdict.className = 'verdict wrong-text';
-        }
-      }
-      explain.classList.add('show');
+        if (explain) explain.classList.add('show');
+      });
     });
   });
-});
-</script>
 
+  document.querySelectorAll('details').forEach(function(d) {
+    d.addEventListener('toggle', function() {
+      if (d.open) {
+        var group = d.parentElement.querySelectorAll('details');
+        group.forEach(function(other) {
+          if (other !== d) other.open = false;
+        });
+      }
+    });
+  });
+</script>
 </body>
 </html>
